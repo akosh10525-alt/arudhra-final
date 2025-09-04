@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Bank Generator</title>
+</head>
+<body>
+    <h1>Question Bank Generator</h1>
+    <textarea id="textInput" rows="10" cols="50" placeholder="Enter text here..."></textarea><br>
+    <button id="generateBtn">Generate Questions</button>
+
+    <h2>Generated Questions:</h2>
+    <div id="questionOutput"></div>
+
+    <script>
+        document.getElementById('generateBtn').onclick = function() {
+            const textInput = document.getElementById('textInput').value;
+            fetch('/generate_questions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: textInput }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('questionOutput').innerHTML = data.questions.join('<br>');
+            });
+        };
+    </script>
+</body>
+</html>
