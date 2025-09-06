@@ -1,0 +1,8 @@
+# Ensure all text files use LF
+* text=auto eol=lf
+
+# Or, if you want CRLF:
+# * text=auto eol=crlf
+
+# Specific override for XML files
+*.xml text eol=lf
