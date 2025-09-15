@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Users - AKOSH 1.2</title>
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: url("Images/Login_Background.jpg") no-repeat center fixed; background-size: cover; font-family: Arial, sans-serif; }
+    .top-bar { position: fixed; top: 0; left: 0; width: 100%; height: 80px; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; background: linear-gradient(90deg, #00264d, #004080); color: white; z-index: 1000; box-shadow: 0px 3px 10px rgba(0,0,0,0.3);}
+    .logo img { height: 60px; width: auto; }
+    .title-box { text-align: center; font-size: 26px; font-weight: bold; flex: 1;}
+    .subtitle { font-size: 14px; font-weight: normal; color: #d9e6f2;}
+    .profile-menu { position: relative; display: inline-block; }
+    .profile-icon { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; background-color: white; cursor: pointer; }
+    .dropdown-content { display: none; position: absolute; right: 0; margin-top: 10px; background-color: white; min-width: 180px; box-shadow: 0px 4px 10px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; z-index: 2000;}
+    .dropdown-content a { color: #003366; padding: 12px 16px; text-decoration: none; display: block; font-weight: bold; }
+    .dropdown-content a:hover { background-color: #003366; color: white; }
+    .profile-menu:hover .dropdown-content { display: block; }
+    .container { margin-top: 120px; width: 95%; max-width: 1200px; margin-left: auto; margin-right: auto; background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 15px; box-shadow: 0px 4px 15px rgba(0,0,0,0.3); text-align: center;}
+    .tabs { display: flex; justify-content: center; margin-bottom: 20px;}
+    .tab-btn { flex: 1; padding: 12px; cursor: pointer; font-weight: bold; border: none; background: #e6f0fa; color: #003366; transition: 0.3s; border-radius: 8px 8px 0 0;}
+    .tab-btn.active { background: #003366; color: white; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .form-section { margin-top: 20px; text-align: left;}
+    .form-section h3 { color: #003366; margin-bottom: 10px;}
+    .form-group { margin-bottom: 12px;}
+    label { display: block; font-weight: bold; margin-bottom: 5px;}
+    input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 8px;}
+    button { padding: 8px 16px; background: #003366; color: white; border: none; border-radius: 8px; cursor: pointer;}
+    button:hover { background: #0055a5;}
+    table { width: 100%; border-collapse: collapse; margin-top: 20px;}
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left;}
+    th { background: #003366; color: white;}
+    tr:nth-child(even) { background: #f9f9f9;}
+    .action-btn { margin-right: 8px; padding: 6px 12px; border-radius: 6px; cursor: pointer;}
+    .approve { background: #28a745; color: white;}
+    .reject { background: #dc3545; color: white;}
+    .delete { background: #ff4444; color: white;}
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="logo"><img src="Images/AFTC_logo.png" alt="Logo"></div>
+    <div class="title-box">Manage Users <br><span class="subtitle">AKOSH 1.2</span></div>
+    <div class="profile-menu">
+      <img src="Images/profile_icon.png" alt="Profile" class="profile-icon">
+      <div class="dropdown-content">
+        <a id="profileName">Profile</a>
+        <a href="/logout">Sign Out</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('create')">Create User</button>
+      <button class="tab-btn" onclick="showTab('requests')">User Requests</button>
+      <button class="tab-btn" onclick="showTab('allusers')">All Users</button>
+    </div>
+
+    <!-- Create User -->
+    <div id="create" class="tab-content active">
+      <h2>Create User</h2>
+      <div class="form-section">
+        <h3>Air Force Personnel</h3>
+        <div class="form-group"><label>Service Number</label><input id="cu-af-service"></div>
+        <div class="form-group"><label>Rank</label><input id="cu-af-rank"></div>
+        <div class="form-group"><label>Name</label><input id="cu-af-name"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="cu-af-password"></div>
+        <button onclick="createUser('af')">Create Air Force User</button>
+      </div>
+      <div class="form-section">
+        <h3>Others</h3>
+        <div class="form-group"><label>Phone Number</label><input id="cu-oth-phone"></div>
+        <div class="form-group"><label>Name</label><input id="cu-oth-name"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="cu-oth-password"></div>
+        <button onclick="createUser('other')">Create Other User</button>
+      </div>
+    </div>
+
+    <!-- User Requests -->
+    <div id="requests" class="tab-content">
+      <h2>User Requests</h2>
+      <h3>Air Force Personnel</h3>
+      <table id="reqAfTable"><thead><tr><th>Service Number</th><th>Rank</th><th>Name</th><th>Action</th></tr></thead><tbody><tr><td colspan="4">Loading...</td></tr></tbody></table>
+      <h3>Others</h3>
+      <table id="reqOthTable"><thead><tr><th>Phone Number</th><th>Name</th><th>Action</th></tr></thead><tbody><tr><td colspan="3">Loading...</td></tr></tbody></table>
+    </div>
+
+    <!-- All Users -->
+    <div id="allusers" class="tab-content">
+      <h2>All Users</h2>
+      <table id="allUsersTable"><thead><tr><th>Username</th><th>Rank</th><th>Name</th><th>Authority</th><th>Action</th></tr></thead><tbody><tr><td colspan="5">Loading...</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelector(`.tab-btn[onclick="showTab('${tab}')"]`).classList.add('active');
+      document.getElementById(tab).classList.add('active');
+      if(tab === "requests") loadRequests();
+      if(tab === "allusers") loadUsers();
+    }
+
+    function createUser(type) {
+      let data = {};
+      if(type === "af") {
+        data = { service_number: document.getElementById("cu-af-service").value, rank: document.getElementById("cu-af-rank").value, name: document.getElementById("cu-af-name").value, password: document.getElementById("cu-af-password").value, authority: 0 };
+      } else {
+        data = { phone_number: document.getElementById("cu-oth-phone").value, name: document.getElementById("cu-oth-name").value, password: document.getElementById("cu-oth-password").value, authority: 2 };
+      }
+      fetch("/api/create_user", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(data) })
+      .then(r => r.json()).then(res => alert(res.message));
+    }
+
+    function loadRequests() {
+      fetch("/api/user_requests").then(r => r.json()).then(data => {
+        const afBody = document.querySelector("#reqAfTable tbody");
+        afBody.innerHTML = "";
+        if (data.af && data.af.length > 0) {
+          data.af.forEach((u,i)=>{ afBody.innerHTML += `<tr><td>${u.username}</td><td>${u.rank}</td><td>${u.name}</td><td><button class='action-btn approve' onclick="handleRequest('af',${i},true)">Approve</button><button class='action-btn reject' onclick="handleRequest('af',${i},false)">Reject</button></td></tr>`;});
+        } else afBody.innerHTML = "<tr><td colspan='4'>No requests</td></tr>";
+        const othBody = document.querySelector("#reqOthTable tbody");
+        othBody.innerHTML = "";
+        if (data.other && data.other.length > 0) {
+          data.other.forEach((u,i)=>{ othBody.innerHTML += `<tr><td>${u.username}</td><td>${u.name}</td><td><button class='action-btn approve' onclick="handleRequest('other',${i},true)">Approve</button><button class='action-btn reject' onclick="handleRequest('other',${i},false)">Reject</button></td></tr>`;});
+        } else othBody.innerHTML = "<tr><td colspan='3'>No requests</td></tr>";
+      });
+    }
+
+    function handleRequest(type, index, approve) {
+      fetch("/api/handle_request", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({type: type, index: index, approve: approve}) })
+      .then(r=>r.json()).then(res=>{ alert(res.message); loadRequests(); });
+    }
+
+    function loadUsers() {
+      fetch("/api/all_users").then(r=>r.json()).then(data=>{
+        const body = document.querySelector("#allUsersTable tbody");
+        body.innerHTML = "";
+        if (data.users && data.users.length > 0) {
+          data.users.forEach((u,i)=>{ body.innerHTML += `<tr><td>${u.username}</td><td>${u.rank}</td><td>${u.name}</td><td>${u.authority}</td><td><button class='action-btn delete' onclick="deleteUser(${i})">Delete</button></td></tr>`;});
+        } else body.innerHTML = "<tr><td colspan='5'>No users</td></tr>";
+      });
+    }
+
+    function deleteUser(index) {
+      fetch("/api/delete_user", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({index:index}) })
+      .then(r=>r.json()).then(res=>{ alert(res.message); loadUsers(); });
+    }
+  </script>
+</body>
+</html>

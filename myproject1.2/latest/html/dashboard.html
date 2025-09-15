@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - AKOSH 1.2</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      max-width: 1920px; max-height: 1080px;
+      overflow: hidden;
+      background: url("Images/Login_Background.jpg") no-repeat center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+    }
+    .top-bar { position: fixed; top: 0; left: 0; width: 100%; height: 80px;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 40px; box-sizing: border-box;
+      background: linear-gradient(90deg, #00264d, #004080);
+      color: white; z-index: 1000; box-shadow: 0px 3px 10px rgba(0,0,0,0.3);}
+    .logo img { height: 60px; width: auto; }
+    .title-box { text-align: center; font-size: 26px; font-weight: bold; letter-spacing: 1px; flex: 1;}
+    .subtitle { font-size: 14px; font-weight: normal; color: #d9e6f2;}
+    .profile-menu { position: relative; display: inline-block; }
+    .profile-icon { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; background-color: white; cursor: pointer; }
+    .dropdown-content { display: none; position: absolute; right: 0; margin-top: 10px; background-color: white; min-width: 150px; box-shadow: 0px 4px 10px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; z-index: 1; }
+    .dropdown-content a { color: #003366; padding: 12px 16px; text-decoration: none; display: block; font-weight: bold; }
+    .dropdown-content a:hover { background-color: #003366; color: white; }
+    .profile-menu:hover .dropdown-content { display: block; }
+    .container { position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 1000px; background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 15px; box-shadow: 0px 4px 15px rgba(0,0,0,0.3); text-align: center;}
+    .options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; justify-items: center;}
+    .option-box { width: 100%; max-width: 320px; height: 120px; background: #e6f0fa; color: #003366; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0px 3px 10px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px;}
+    .option-box:hover { background: #003366; color: white;}
+    .option-box:active { transform: scale(0.97);}
+    .query-btn { position: fixed; bottom: 20px; right: 20px; background: #003366; color: white; border: none; border-radius: 50px; padding: 12px 20px; font-size: 14px; cursor: pointer; box-shadow: 0px 3px 10px rgba(0,0,0,0.2); transition: background 0.3s ease; z-index: 1100;}
+    .query-btn:hover { background: #0055a5;}
+    @media (max-width: 700px) { .options { grid-template-columns: 1fr; } .option-box { max-width: none; height: auto; padding: 20px;}}
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="logo"><img src="Images/AFTC_logo.png" alt="Logo"></div>
+    <div class="title-box">AIR FORCE TECHNICAL COLLEGE <br><span class="subtitle">AKOSH 1.2 – Dashboard</span></div>
+    <div class="profile-menu">
+      <img src="Images/profile_icon.png" alt="Profile" class="profile-icon">
+      <div class="dropdown-content">
+        <a href="profile.html">View Profile</a>
+        <a href="/logout">Sign Out</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="options">
+      <div class="option-box" onclick="location.href='generate_questions.html'">Generate Questions</div>
+      <div class="option-box" onclick="location.href='/precis_documents'">Precis / Reference Documents</div>
+      <div class="option-box" onclick="location.href='/manage_users'">Manage Users</div>
+      <div class="option-box" onclick="location.href='/manage_queries'">Manage Queries</div>
+    </div>
+  </div>
+
+  <!-- Floating Query Button -->
+  <button class="query-btn" onclick="location.href='/query'">Query</button>
+</body>
+</html>

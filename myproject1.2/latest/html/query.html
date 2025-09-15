@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Query - AKOSH 1.2</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: url("Images/Login_Background.jpg") no-repeat center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      background: linear-gradient(90deg, #00264d, #004080);
+      color: white;
+      z-index: 1000;
+      box-shadow: 0px 3px 10px rgba(0,0,0,0.3);
+      box-sizing: border-box;
+    }
+
+    .logo img { height: 60px; width: auto; }
+
+    .title-box {
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      flex: 1;
+    }
+    .subtitle { font-size: 14px; font-weight: normal; color: #d9e6f2; }
+
+    /* Profile Dropdown */
+    .profile-menu { position: relative; display: inline-block; }
+    .profile-icon {
+      width: 55px; height: 55px;
+      border-radius: 50%; object-fit: cover;
+      border: 2px solid #fff; background-color: white;
+      cursor: pointer;
+    }
+    .dropdown-content {
+      display: none; position: absolute; right: 0; margin-top: 10px;
+      background-color: white; min-width: 180px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+      border-radius: 8px; overflow: hidden; z-index: 2000;
+    }
+    .dropdown-content a {
+      color: #003366; padding: 12px 16px;
+      text-decoration: none; display: block; font-weight: bold;
+    }
+    .dropdown-content a:hover { background-color: #003366; color: white; }
+    .profile-menu:hover .dropdown-content { display: block; }
+
+    .container {
+      margin-top: 120px;
+      width: 80%; max-width: 600px;
+      margin-left: auto; margin-right: auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%; min-height: 150px;
+      padding: 10px; border: 1px solid #ccc; border-radius: 8px;
+      resize: vertical; font-size: 14px;
+    }
+
+    .button-group {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #003366; color: white;
+      border: none; border-radius: 8px;
+      cursor: pointer; font-size: 16px;
+    }
+    button:hover { background: #0055a5; }
+
+    /* Popup */
+    .popup {
+      display: none; position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center; align-items: center;
+    }
+    .popup-content {
+      background: white; padding: 20px 30px;
+      border-radius: 10px; text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .popup-content button {
+      margin-top: 10px; padding: 8px 20px;
+      border: none; background: #003366;
+      color: white; border-radius: 8px; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="logo"><img src="Images/AFTC_logo.png" alt="Logo"></div>
+    <div class="title-box">Query <br><span class="subtitle">AKOSH 1.2</span></div>
+    <div class="profile-menu">
+      <img src="Images/profile_icon.png" alt="Profile" class="profile-icon">
+      <div class="dropdown-content">
+        <a id="profileName">Profile</a>
+        <a href="/logout">Sign Out</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Query Form -->
+  <div class="container">
+    <h2>Submit Your Query</h2>
+    <textarea id="queryText" placeholder="Write your query here..."></textarea>
+    <div class="button-group">
+      <button onclick="submitQuery()">Submit</button>
+      <button onclick="window.history.back()">Back</button>
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <p id="popup-message">Message</p>
+      <button onclick="closePopup()">OK</button>
+    </div>
+  </div>
+
+  <script>
+    // Fetch user info
+    fetch("/api/user")
+      .then(r => r.json())
+      .then(data => {
+        if (data.status !== "success") { window.location.href = "/"; return; }
+        const user = data.user;
+        document.getElementById("profileName").innerText = `${user.rank || ""} ${user.name || ""}`;
+      });
+
+    function showPopup(msg){
+      document.getElementById("popup-message").innerText = msg;
+      document.getElementById("popup").style.display = "flex";
+    }
+    function closePopup(){
+      document.getElementById("popup").style.display = "none";
+    }
+
+    function submitQuery(){
+      const text = document.getElementById("queryText").value.trim();
+      if(!text){ showPopup("Please enter a query before submitting."); return; }
+
+      fetch("/api/query", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({feedback: text}) // kept "feedback" key for compatibility
+      })
+      .then(r=>r.json())
+      .then(data=>{
+        showPopup(data.message || "Query submitted!");
+        document.getElementById("queryText").value = "";
+      })
+      .catch(()=> showPopup("Error submitting query"));
+    }
+  </script>
+</body>
+</html>

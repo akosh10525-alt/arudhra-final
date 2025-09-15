@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Precis / Reference Documents - AKOSH 1.2</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: url("Images/Login_Background.jpg") no-repeat center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      background: linear-gradient(90deg, #00264d, #004080);
+      color: white;
+      z-index: 1000;
+      box-shadow: 0px 3px 10px rgba(0,0,0,0.3);
+      box-sizing: border-box;
+    }
+
+    .logo img {
+      height: 60px;
+      width: auto;
+    }
+
+    .title-box {
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      flex: 1;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      font-weight: normal;
+      color: #d9e6f2;
+    }
+
+    /* Profile Dropdown (fixed inside screen) */
+    .profile-menu {
+      position: relative;
+      display: inline-block;
+    }
+    .profile-icon {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+      background-color: white;
+      cursor: pointer;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;   /* stick to the right edge */
+      margin-top: 10px;
+      background-color: white;
+      min-width: 180px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 2000;
+    }
+    .dropdown-content a {
+      color: #003366;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      font-weight: bold;
+    }
+    .dropdown-content a:hover {
+      background-color: #003366;
+      color: white;
+    }
+    .profile-menu:hover .dropdown-content {
+      display: block;
+    }
+
+    .container {
+      margin-top: 120px;
+      width: 80%;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    /* Scrollable PDF list box */
+    .doc-list-box {
+      max-height: 400px; /* adjust as needed */
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      background: #f9f9f9;
+    }
+
+    .doc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .doc-list li {
+      margin: 8px 0;
+      padding: 10px;
+      background: #e6f0fa;
+      border-radius: 8px;
+    }
+    .doc-list li a {
+      color: #003366;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .doc-list li a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="logo"><img src="Images/AFTC_logo.png" alt="Logo"></div>
+    <div class="title-box">
+      Precis / Reference Documents <br>
+      <span class="subtitle">AKOSH 1.2</span>
+    </div>
+    <div class="profile-menu">
+      <img src="Images/profile_icon.png" alt="Profile" class="profile-icon">
+      <div class="dropdown-content">
+        <a id="profileName">Profile</a>
+        <a href="/logout">Sign Out</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Document List -->
+  <div class="container">
+    <h2>Available Documents</h2>
+    <div class="doc-list-box">
+      <ul class="doc-list" id="docList"><li>Loading...</li></ul>
+    </div>
+  </div>
+
+  <script>
+    // Fetch user info
+    fetch("/api/user")
+      .then(r => r.json())
+      .then(data => {
+        if (data.status !== "success") {
+          window.location.href = "/";
+          return;
+        }
+        const user = data.user;
+        document.getElementById("profileName").innerText = `${user.rank || ""} ${user.name || ""}`;
+      });
+
+    // Fetch documents
+    fetch("/api/documents")
+      .then(r => r.json())
+      .then(data => {
+        const ul = document.getElementById("docList");
+        ul.innerHTML = "";
+        if (data.status === "success" && data.documents.length > 0) {
+          data.documents.forEach(doc => {
+            const li = document.createElement("li");
+            const a = document.createElement("a");
+            a.href = `/PrecisDoc/${encodeURIComponent(doc)}`;
+            a.target = "_blank";
+            a.innerText = doc;
+            li.appendChild(a);
+            ul.appendChild(li);
+          });
+        } else {
+          ul.innerHTML = "<li>No documents available.</li>";
+        }
+      });
+  </script>
+</body>
+</html>
