@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IAF Project Portal</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url("Login_Background.jpg") no-repeat center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+    }
+
+    .title-box {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      padding: 15px 30px;
+      background: rgba(0, 51, 102, 0.85);
+      color: white;
+      border-radius: 10px;
+      font-size: 22px;
+      font-weight: bold;
+      line-height: 1.5;
+    }
+
+    .container {
+      position: absolute;
+      top: 50%;
+      right: 10%;
+      transform: translateY(-50%);
+      width: 350px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      width: 100px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #003366;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background: #003366;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #0055a5;
+    }
+
+    .toggle-links {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .toggle-links a {
+      color: #003366;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Popup */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .popup-content button {
+      margin-top: 10px;
+      width: auto;
+      padding: 8px 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="title-box">
+    <div>AIR FORCE TECHNICAL COLLEGE</div>
+    <div>AKOSH 1.2</div>
+  </div>
+
+  <div class="container">
+    <div class="logo">
+      <img src="AFTC_logo.png" alt="Logo">
+    </div>
+
+    <!-- Login Form -->
+    <div id="login-form">
+      <h2>Login</h2>
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="login-username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password">
+      </div>
+      <button onclick="saveLogin()">Login</button>
+      <div class="toggle-links">
+        <a onclick="showSignup()">Don’t have an account? Sign Up</a>
+      </div>
+    </div>
+
+    <!-- Signup Options -->
+    <div id="signup-options" class="hidden">
+      <h2>Sign Up</h2>
+      <button onclick="showAFForm()">Air Force Personnel</button>
+      <button onclick="showOtherForm()">Others</button>
+      <div class="toggle-links">
+        <a onclick="showLogin()">Back to Login</a>
+      </div>
+    </div>
+
+    <!-- AF Personnel Signup -->
+    <div id="signup-af" class="hidden">
+      <h2>Air Force Personnel</h2>
+      <div class="form-group">
+        <label>Service Number</label>
+        <input type="text" id="af-service">
+      </div>
+      <div class="form-group">
+        <label>Rank</label>
+        <input type="text" id="af-rank">
+      </div>
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="af-name">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="af-password">
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="af-confirm">
+      </div>
+      <button onclick="saveAF()">Sign Up</button>
+      <div class="toggle-links">
+        <a onclick="showSignup()">Back</a>
+      </div>
+    </div>
+
+    <!-- Others Signup -->
+    <div id="signup-other" class="hidden">
+      <h2>Others</h2>
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="other-name">
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="text" id="other-phone">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="other-email">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="other-password">
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="other-confirm">
+      </div>
+      <button onclick="saveOther()">Sign Up</button>
+      <div class="toggle-links">
+        <a onclick="showSignup()">Back</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <p>Request saved successfully</p>
+      <button onclick="closePopup()">OK</button>
+    </div>
+  </div>
+
+  <script>
+    function showSignup() {
+      document.getElementById("login-form").classList.add("hidden");
+      document.getElementById("signup-options").classList.remove("hidden");
+      document.getElementById("signup-af").classList.add("hidden");
+      document.getElementById("signup-other").classList.add("hidden");
+    }
+
+    function showLogin() {
+      document.getElementById("login-form").classList.remove("hidden");
+      document.getElementById("signup-options").classList.add("hidden");
+      document.getElementById("signup-af").classList.add("hidden");
+      document.getElementById("signup-other").classList.add("hidden");
+    }
+
+    function showAFForm() {
+      document.getElementById("signup-af").classList.remove("hidden");
+      document.getElementById("signup-options").classList.add("hidden");
+    }
+
+    function showOtherForm() {
+      document.getElementById("signup-other").classList.remove("hidden");
+      document.getElementById("signup-options").classList.add("hidden");
+    }
+
+    function showPopup() {
+      document.getElementById("popup").style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
+    function clearFields(ids) {
+      ids.forEach(id => document.getElementById(id).value = "");
+    }
+
+    // Saving Functions (mock sending to backend)
+    function saveLogin() {
+      let data = {
+        username: document.getElementById("login-username").value,
+        password: document.getElementById("login-password").value
+      };
+      console.log("Login Data: ", data);
+      clearFields(["login-username", "login-password"]);
+    }
+
+    function saveAF() {
+      let data = {
+        service_number: document.getElementById("af-service").value,
+        rank: document.getElementById("af-rank").value,
+        name: document.getElementById("af-name").value,
+        password: document.getElementById("af-password").value
+      };
+      console.log("AF Data: ", data);
+      clearFields(["af-service","af-rank","af-name","af-password","af-confirm"]);
+      showPopup();
+    }
+
+    function saveOther() {
+      let data = {
+        name: document.getElementById("other-name").value,
+        phone: document.getElementById("other-phone").value,
+        email: document.getElementById("other-email").value,
+        password: document.getElementById("other-password").value
+      };
+      console.log("Other Data: ", data);
+      clearFields(["other-name","other-phone","other-email","other-password","other-confirm"]);
+      showPopup();
+    }
+  </script>
+</body>
+</html>
