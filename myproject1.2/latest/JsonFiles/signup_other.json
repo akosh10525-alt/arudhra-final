@@ -1,0 +1,16 @@
+[
+    {
+        "username": "123456",
+        "password": "qwe@123",
+        "authority": 2,
+        "rank": "N/A",
+        "name": "qwe"
+    },
+    {
+        "username": "1231231231",
+        "password": "asd@123",
+        "authority": 2,
+        "rank": "N/A",
+        "name": "asd"
+    }
+]
